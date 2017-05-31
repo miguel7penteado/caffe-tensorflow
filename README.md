@@ -1,28 +1,28 @@
-# Caffe to TensorFlow
+# Caffe para TensorFlow
 
-Convert [Caffe](https://github.com/BVLC/caffe/) models to [TensorFlow](https://github.com/tensorflow/tensorflow).
+Converte modelos [Caffe](https://github.com/BVLC/caffe/) para [TensorFlow](https://github.com/tensorflow/tensorflow).
 
-## Usage
+## Uso
 
-Run `convert.py` to convert an existing Caffe model to TensorFlow.
+Execute `convert.py` para converter um modelo Caffe existente para TensorFlow.
 
-Make sure you're using the latest Caffe format (see the notes section for more info).
+Tenha certeza que você está usando o último formato Caffe (veja a seção de notas para mais informações).
 
-The output consists of two files:
+A saida consiste em dois arquivos:
 
-1. A data file (in NumPy's native format) containing the model's learned parameters.
-2. A Python class that constructs the model's graph.
+1. Um arquivo de dados (em formato NumPy's nativo) contendo os parâmetros aprendidos do modelo.
+2. Uma classe python que constroi o grafo do modelo.
 
-### Examples
+### Examplos
 
-See the [examples](examples/) folder for more details.
+Veja a pasta [examples](examples/) para mais detalhes.
 
-## Verification
+## Verificação
 
-The following converted models have been verified on the ILSVRC2012 validation set using
+Os modelos convertidos abaixo foram verificados no conjunto de validacao ILSVRC2012 usando
 [validate.py](examples/imagenet/validate.py).
 
-| Model                                                 | Top 5 Accuracy |
+| Modelo                                                | Top 5 Accuracy |
 |:------------------------------------------------------|---------------:|
 | [ResNet 152](http://arxiv.org/abs/1512.03385)         |         92.92% |
 | [ResNet 101](http://arxiv.org/abs/1512.03385)         |         92.63% |
@@ -33,22 +33,22 @@ The following converted models have been verified on the ILSVRC2012 validation s
 | [CaffeNet](http://arxiv.org/abs/1408.5093)            |         79.93% |
 | [AlexNet](http://goo.gl/3BilWd)                       |         79.84% |
 
-## Notes
+## Notas
 
-- Only the new Caffe model format is supported. If you have an old model, use the `upgrade_net_proto_text` and `upgrade_net_proto_binary` tools that ship with Caffe to upgrade them first. Also make sure you're using a fairly recent version of Caffe.
+- Apenas o novo modelo Caffe é suportado. Se vocẽ tem um modelo antigo, use as ferramentas `upgrade_net_proto_text` e `upgrade_net_proto_binary` que vem junto com o Caffe para atualiza-los primeiro. Primeiramente tenha certeza que está usando uma versão bem recente do Caffe.
 
-- It appears that Caffe and TensorFlow cannot be concurrently invoked (CUDA conflicts - even with `set_mode_cpu`). This makes it a two-stage process: first extract the parameters with `convert.py`, then import it into TensorFlow.
+- Aparentemente Caffe e TensorFlow não podem ser invocados concorrentemente (conflitos CUDA - mesmo que você rode `set_mode_cpu`). Isto acaba resultando em um processo dois estágios: primeiro extraia os parâmetros com `convert.py`, então importe-os no TensorFlow.
 
-- Caffe is not strictly required. If PyCaffe is found in your `PYTHONPATH`, and the `USE_PYCAFFE` environment variable is set, it will be used. Otherwise, a fallback will be used. However, the fallback uses the pure Python-based implementation of protobuf, which is astoundingly slow (~1.5 minutes to parse the VGG16 parameters). The experimental CPP protobuf backend doesn't particularly help here, since it runs into the file size limit (Caffe gets around this by overriding this limit in C++). A cleaner solution here would be to implement the loader as a C++ module.
+- Caffe não é necessáriamente requerido. Se PyCaffe estiver disponível no seu `PYTHONPATH`, e a variável `USE_PYCAFFE` estiver setada, ele será usado. De outra forma, um fallback será usado. De qualquer jeito, o fallback acaba usando uma implementação puramente em python de `protobuf`, que é impressionantemente lenta (~1.5 minutos para ler os parâmetros VGG16). Um backend experimental de protobuf em c++ particularmente não ajuda muito aqui, uma vez que ele roda no limite do tamanho do arquivo (Caffe resolve esse problema sobrepondo o este limite em C++). Uma solução limpa aqui seria implementar o carregador como um módulo C++ .
 
-- Only a subset of Caffe layers and accompanying parameters are currently supported.
+- Só um subconjunto das camadas de Caffe e parâmetros de acompanhamento são atualmente suportados.
 
-- Not all Caffe models can be converted to TensorFlow. For instance, Caffe supports arbitrary padding whereas TensorFlow's support is currently restricted to `SAME` and `VALID`.
+- Nem todos os modelos de Caffe podem ser convertidos para TensorFlow. No caso, Caffe suporta preenchimento arbitrário onde o respectivo suporte do TensorFlow atualmente é restrito a `SAME` e `VALID`.
 
-- The border values are handled differently by Caffe and TensorFlow. However, these don't appear to affect things too much.
+- Os valores de borda são tratados diferentemente por Caffe e TensorFlow. De toda forma, isso não parece afetar muito as coisas.
 
-- Image rescaling can affect the ILSVRC2012 top 5 accuracy listed above slightly. VGG16 expects isotropic rescaling (anisotropic reduces accuracy to 88.45%) whereas BVLC's implementation of GoogLeNet expects anisotropic (isotropic reduces accuracy to 87.7%).
+- Redimensionamento de imagem pode afetar o ILSVRC2012 top 5 accuracy listado acima sensivelmente. VGG16 espera um redimensionamento isotropico (anisotropico reduz a precisão a 88.45%) onde a implementação BVLC da GoogLeNet espera redimensionamento anisotropico (isotropico reduz a precisão a 87.7%).
 
-- The support class `kaffe.tensorflow.Network` has no internal dependencies. It can be safely extracted and deployed without the rest of this library.
+- O suporte a classe `kaffe.tensorflow.Network` não tem dependẽncias internas. Ela pode ser seguramente retirada e distribuida sem o resto da biblioteca.
 
-- The ResNet model uses 1x1 convolutions with a stride of 2. This is currently only supported in the master branch of TensorFlow (the latest release at time of writing being v0.8.0, which does not support it).
+- O modelo ResNet usa convoluções 1x1 com um passo de 2. Isso é suportado atualmente apenas no master branch do TensorFlow (a última compilação estável no momento em que este artigo estava sendo escrito era v0.8.0, que não suportava tal funcionalidade).
