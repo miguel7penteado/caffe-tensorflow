@@ -1,21 +1,21 @@
-# ImageNet Examples
+# Exemplos ImageNet
 
-This folder contains two examples that demonstrate how to use converted networks for
-image classification. Also included are sample converted models and helper scripts.
+Esta pasta contém 2 exemplos que demonstram como usar redes convertidas para
+classificação de imagens. Também inclusas estão amostras de modelos convertidos e scripts de suporte.
 
-## 1. Image Classification
+## 1. Classificação de Imagens
 
-`classify.py` uses a GoogleNet trained on ImageNet, converted to TensorFlow, for classifying images.
+`classify.py` usa a rede GoogleNet treinada na ImageNet, convertida para TensorFlow, para classificar imagens.
 
-The architecture used is defined in `models/googlenet.py` (which was auto-generated). You will need
-to download and convert the weights from Caffe to run the example. The download link for the
-corresponding weights can be found in Caffe's `models/bvlc_googlenet/` folder.
+A arquitetura usada é definida em `models/googlenet.py` (que é auto-generada). Vocẽ irá precisar baixar
+e converter os pesos do Caffe para rodar o exemplo. O link de download para os pesos
+correspondentes podem ser encontrados na pasta `models/bvlc_googlenet/` do Caffe.
 
-You can run this example like so:
+Vocẽ pode rodar este exemplo mais ou menos assim:
 
     $ ./classify.py /path/to/googlenet.npy ~/pics/kitty.png ~/pics/woof.jpg
 
-You should expect to see an output similar to this:
+Vocẽ deverá ter uma saída similar a isso:
 
     Image                Classified As                  Confidence
     ----------------------------------------------------------------------
@@ -23,19 +23,20 @@ You should expect to see an output similar to this:
     woof.jpg             Bernese mountain dog           82.02 %
 
 
-## 2. ImageNet Validation
+## 2. Validação ImageNet
 
-`validate.py` evaluates a converted model against the ImageNet (ILSVRC12) validation set. To run
-this script, you will need a copy of the ImageNet validation set. You can run it as follows:
+`validate.py` computará um modelo convertido perante a base de validação ImageNet (ILSVRC12). Para rodar este
+script, você irá precisar de uma cópia da base de validação da ImageNet. Vocẽ pode roda-la conforme abaixo:
 
     $ ./validate.py alexnet.npy val.txt imagenet-val/ --model AlexNet
 
-The validation results specified in the main readme were generated using this script.
+Os resultados de validação especificados no readme principal gerado onde foi rodado este script.
 
-## Helper Scripts
+## Scripts de ajuda ou de suporte
 
-In addition to the examples above, this folder includes a few additional files:
+Em adição aos exemplos acima, esta pasta inclui alguns poucos arquivos adicionais:
 
-- `dataset.py` : helper script for loading, pre-processing, and iterating over images
-- `models/` : contains converted models (auto-generated)
-- `models/helper.py` : describes how the data should be preprocessed for each model
+- `dataset.py` : helper script para carregar, pre-processar, e interagir entre as imagens
+- `models/` : contem modelos convertidos (auto-gerados)
+- `models/helper.py` : descrevem como os dados devem ser preprocessados para cada modelo
+
